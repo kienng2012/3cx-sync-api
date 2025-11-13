@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)https://www.canvavn.store.vn/ -->
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+
+    <style>
+        .tbl-style td, th {
+            padding: 5px;
+            border: 1px solid;
+        }
+    </style>
+    <style>
+        .pagination ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /*background-color: #333333;*/
+        }
+
+        .pagination li {
+            float: left;
+        }
+
+        .pagination li a {
+            display: block;
+            /*color: white;*/
+            text-align: center;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .pagination li a:hover {
+            /*background-color: #111111;*/
+            background-color: #4DC7A0;
+        }
+
+        .pagination .disabled a > span {
+            color: white;
+        !important;
+            background: #062c33;
+        !important;
+        }
+
+        .pagination .active a > span {
+            color: red;
+        !important;
+            background: yellow;
+        !important;
+        }
+    </style>
+</head>
+<body>
+<!-- Include menu.html -->
+<!--
+<th:block th:include="/menu"></th:block>
+-->
+<div th:insert="includes/menu :: menu"></div>
+<div id="paging_ajax">
+    <table class="tbl-style">
+        <thead>
+        <tr>
+            <th> Id</th>
+            <th> Email</th>
+            <th> Password</th>
+            <th> Trạng thái</th>
+            <th> Giá</th>
+            <th> Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${accCanvas.empty}">
+            <td colspan="2"> No Account Available</td>
+        </tr>
+        <tr th:each="obj : ${accCanvas}">
+            <td><span th:text="${obj.id}"></span></td>
+            <td><span th:text="${obj.email}"> </span></td>
+            <td><span th:text="${#strings.substring(obj.password,0,3)}"></span>***</td>
+            <td><span th:text="${obj.isSell!=null && obj.isSell ==true}?'Đã bán':'Chưa bán'"></span></td>
+            <td><span th:text="${obj.price}"> </span></td>
+            <td><span></span><a th:href="@{'/manager/show-acc-detail?id='+${obj.id}+'&email='+ ${obj.email}}">Bán</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:insert="includes/paging2 :: paging"></div>
+</body>

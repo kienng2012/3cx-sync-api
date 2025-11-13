@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)https://www.canvavn.store.vn/ -->
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+
+    <style>
+        .tbl-style td, th {
+            padding: 5px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<!-- Include menu.html -->
+<!--
+<th:block th:include="/menu"></th:block>
+-->
+<div th:insert="includes/menu :: menu"></div>
+
+<table class="tbl-style">
+    <thead>
+    <tr>
+        <th> Id</th>
+        <th> Email</th>
+        <th> Password</th>
+        <th> Trạng thái</th>
+        <th> Giá</th>
+        <th> Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${accCanvas.empty}">
+        <td colspan="2"> No Account Available</td>
+    </tr>
+    <tr th:each="obj : ${accCanvas}">
+        <td><span th:text="${obj.id}"></span></td>
+        <td><span th:text="${obj.email}"> </span></td>
+        <td><span th:text="${#strings.substring(obj.password,0,3)}"></span>***</td>
+        <td><span th:text="${obj.isSell!=null && obj.isSell ==true}?'Đã bán':'Chưa bán'"></span></td>
+        <td><span th:text="${obj.price}"> </span></td>
+        <td><span></span><a th:href="@{'/manager/show-acc-detail?id='+${obj.id}+'&email='+ ${obj.email}}">Bán</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>

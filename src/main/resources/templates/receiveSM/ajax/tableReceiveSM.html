@@ -1,0 +1,58 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th> Mã tin nhắn</th>
+                <th> Username</th>
+                <th> Brandname</th>
+                <th> Số điện thoại</th>
+                <th> Nhà mạng</th>
+                <th> emsClass</th>
+                <th> DataCoding</th>
+                <th> Tổng số tin</th>
+                <th> Phương thức</th>
+                <th> Thời gian gửi tin</th>
+                <th> Nội dung</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${lstReceiveSM.empty}">
+                <td colspan="2"> No Account Available</td>
+            </tr>
+            <tr th:each="obj : ${lstReceiveSM}">
+                <td><span th:text="${obj.Id}"></span></td>
+                <td><span th:text="${obj.userId}"> </span></td>
+                <td><span th:text="${obj.sourceAddr}"></span></td>
+                <td><span th:text="${obj.destAddr}"></span></td>
+                <td><span th:text="${obj.telco}"></span></td>
+                <td><span th:text="${obj.emsClass}"></span></td>
+                <td><span th:text="${obj.dataCoding}"></span></td>
+                <td><span th:text="${obj.totalSms}"></span></td>
+                <td><span th:text="${obj.method}"></span></td>
+                <td><span th:text="${obj.timeReceive}"></span></td>
+                <td><span th:text="${obj.shortMessage}"></span></td>
+                              <!--            <td><span></span><a th:href="@{'/manager/show-acc-detail?id='+${obj.id}+'&email='+ ${obj.email}}">Bán</a>-->
+                <td>
+                    <div class="float-block">
+                        <a class="button" th:onclick="|openModal('${obj.Id}','view')|">Xem</a>
+                        <a class="button" th:onclick="|openModal('${obj.Id}','edit')|">Sửa</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="float-block">
+                        <a class="button" th:href="@{'/manager/user/createUser'}">Thêm mới</a>
+                        <a class="button" th:href="@{'/manager/user/viewUser?id='+${obj.Id}}">Xem</a>
+                        <a class="button" th:href="@{'/manager/user/editUser?id='+${obj.Id}}">Sửa</a>
+
+                    </div>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--<div th:insert="includes/pagingAjax :: paging"></div>-->
+        <div th:insert="includes/pagingBackend :: paging"></div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="fragmentView">
+        <div class="modal-content modal-content-full">
+            <div class="panel-heading">
+                <span class="pannel-text">Chi tiết khách hàng</span>
+                <!--<span class="closePopup" th:attr="onclick=|closePopupFunction('modalDetailId')|">×</span>-->
+            </div>
+            <div class="content">
+                <form role="form" action="#" th:object="${user}">
+                    <input type="hidden" th:field="*{userId}">
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input type="text" th:field="*{username}" readonly="true" disabled="true"/>
+                        <span class="col-space"></span>
+                        <label>Mật khẩu:</label>
+                        <input type="text" th:field="*{passwords}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên Công ty:</label>
+                        <input type="text" th:field="*{company}" class="long-width-element" readonly="true"
+                               disabled="true"/>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="text" th:field="*{email}" class="long-width-element" readonly="true"
+                               disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Trạng thái</label>
+                        <input type="checkbox" th:field="*{enable}" readonly="true" disabled="true"/>
+                        <span class="col-space-checkbox"></span>
+
+                        <label>Trả trước:</label>
+                        <input type="checkbox" th:field="*{prepaid}" readonly="true" disabled="true"/>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Số dư:</label>
+                        <input type="text" th:field="*{cashBalance}" readonly="true" disabled="true"/>
+                        <span class="col-space"></span>
+                        <label>Đơn vị tiền tệ:</label>
+                        <input type="text" th:field="*{currency}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Người đại diện:</label>
+                        <input type="text" th:field="*{fullname}" readonly="true" disabled="true"/>
+                        <span class="col-space"></span>
+                        <label>Số điện thoại:</label>
+                        <input type="text" th:field="*{phone}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gửi tin QC,MXH:</label>
+                        <input type="checkbox" th:field="*{allowSocialMsg}" readonly="true" disabled="true"/>
+                        <span class="col-space-checkbox"></span>
+
+                        <label>Gửi trùng tin:</label>
+                        <input type="checkbox" th:field="*{messageDouble}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nhận thông báo:</label>
+                        <!--                        <input type="text" th:field="*{notification}" readonly="true" disabled="true"/>-->
+                        <input type="checkbox" th:field="*{notification}" readonly="true" disabled="true"/>
+                        <span class="col-space"></span>
+                        <label>Thời gian đăng nhâp:</label>
+                        <input type="text" th:field="*{lastLogin}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa chỉ IP:</label>
+                        <input type="text" th:field="*{ipAddress}" class="long-width-element" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Người tạo:</label>
+
+                        <input type="text" th:field="*{createdBy.userName}" readonly="true" disabled="true">
+                        <span class="col-space"></span>
+                        <label>Ngày tạo:</label>
+                        <input type="text" th:field="*{createTime}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Người sửa đổi:</label>
+                        <input type="text" th:field="*{updatedBy.userName}" readonly="true" disabled="true">
+                        <span class="col-space"></span>
+                        <label>Ngày sửa đổi:</label>
+                        <input type="text" th:field="*{updatedTime}" readonly="true" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="red-text" th:text="${msg !=null }? ${msg} : '' "></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

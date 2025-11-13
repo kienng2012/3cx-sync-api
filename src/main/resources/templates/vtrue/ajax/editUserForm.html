@@ -1,0 +1,94 @@
+<div xmlns:th="http://www.thymeleaf.org">
+
+    <!--    <div th:if="${typeAction =='edit'}">-->
+    <div th:fragment="fragmentEdit">
+        <div class="modal-content modal-content-full">
+            <div class="panel-heading">
+                <span class="pannel-text">Chi tiết khách hàng</span>
+                <!--<span class="closePopup" th:attr="onclick=|closePopupFunction('modalDetailId')|">×</span>-->
+            </div>
+            <div class="content">
+                <!--                <form role="form" action="#" th:action="@{/manager/user}" method="post" th:object="${user}">-->
+                <form role="form" action="#" th:action="@{/manager/user/editUser}" method="post"
+                      th:object="${userDto}">
+                    <input type="hidden" th:field="*{userId}">
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input type="text" th:field="*{username}" readonly="true"/>
+                        <span th:if="${#fields.hasErrors('username')}" th:errorclass="error-text" th:errors="*{username}"/>
+                        <span class="col-space"></span>
+                        <label>Mật khẩu:</label>
+                        <input type="text" th:field="*{passwords}" readonly="true"/>
+                        <span th:if="${#fields.hasErrors('passwords')}" th:errorclass="error-text" th:errors="*{passwords}"/>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên Công ty:</label>
+                        <input type="text" th:field="*{company}" class="long-width-element"/>
+                        <span th:if="${#fields.hasErrors('company')}" th:errorclass="error-text" th:errors="*{company}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="text" th:field="*{email}" class="long-width-element"/>
+                        <span th:if="${#fields.hasErrors('email')}" th:errorclass="error-text" th:errors="*{email}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <input type="checkbox" th:field="*{enable}"/>
+                        <span class="col-space-checkbox"></span>
+                        <label>Trả trước:</label>
+                        <input type="checkbox" th:field="*{prepaid}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số dư:</label>
+                        <input type="text" th:field="*{cashBalance}"/>
+                        <span class="col-space"></span>
+                        <label>Đơn vị tiền tệ:</label>
+                        <input type="text" th:field="*{currency}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Người đại diện:</label>
+                        <input type="text" th:field="*{fullname}"/>
+                        <span class="col-space"></span>
+                        <label>Số điện thoại:</label>
+                        <input type="text" th:field="*{phone}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gửi tin QC,MXH:</label>
+                        <input type="checkbox" th:field="*{allowSocialMsg}"/>
+                        <span class="col-space-checkbox"></span>
+                        <label>Gửi trùng tin:</label>
+                        <input type="checkbox" th:field="*{messageDouble}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nhận thông báo:</label>
+                        <!--                        <input type="text" th:field="*{notification}"/>-->
+                        <input type="checkbox" th:field="*{notification}"/>
+                        <span class="col-space"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa chỉ IP:</label>
+                        <input type="text" th:field="*{ipAddress}" class="long-width-element"/>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit">Cập nhật</button>
+                        <a class="button" th:href="@{'/manager/userUsingLayout'}">Back</a>
+                    </div>
+                    <div class="form-group">
+                        <span class="red-text" th:text="${msg !=null }? ${msg} : '' "></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--    </div>-->
+</div>

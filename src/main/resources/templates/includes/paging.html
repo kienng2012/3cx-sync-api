@@ -1,0 +1,60 @@
+<div th:fragment="paging" xmlns:th="http://www.thymeleaf.org">
+    <div th:if="${#strings.contains(url,'?')}">
+        <ul class="pagination">
+            <th:block th:each="pageNumber : ${page.totalPages}">
+                <li th:if="${page.first}" class="page-item">
+                    <a class="page-link" th:href="${url} + '&page='+ ${page.number} + '&size=' + ${page.getSize}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item active" th:if="${pageNumber} == ${page.number}">
+                    <a class="page-link" th:text="${pageNumber}" href="#"></a>
+                </li>
+                <li class="page-item disabled" th:if="${pageNumber} == -1">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="page-item" th:if="${pageNumber} != -1 and ${pageNumber} != ${page.number}">
+                    <a class="page-link" th:text="${pageNumber}"
+                       th:href="${url} + '&page='+ ${pageNumber} + '&size=' + ${page.size}"></a>
+                </li>
+                <li th:if="${page.last}" class="page-item" aria-label="Next">
+                    <a class="page-link"
+                       th:href="${url} + '&page='+ ${page.number + 2} + '&size=' + ${page.size}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+
+    <div th:unless="${#strings.contains(url,'?')}">
+        <ul class="pagination">
+            <th:block th:each="pageNumber : ${page.totalPages}">
+                <li th:if="${page.first}" class="page-item">
+                    <a class="page-link" th:href="${url} + '?page='+ ${page.number+1} + '&size=' + ${page.getSize}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item active" th:if="${pageNumber} == ${page.number+1}">
+                    <a class="page-link" th:text="${pageNumber}" href="#"></a>
+                </li>
+                <li class="page-item disabled" th:if="${pageNumber} == -1">
+                    <a class="page-link" href="#">...</a>
+                </li>
+                <li class="page-item" th:if="${pageNumber} != -1 and ${pageNumber} != ${page.number+1}">
+                    <a class="page-link" th:text="${pageNumber}"
+                       th:href="${url} + '?page='+ ${pageNumber} + '&size=' + ${page.size}"></a>
+                </li>
+                <li th:if="${page.last}" class="page-item" aria-label="Next">
+                    <a class="page-link"
+                       th:href="${url} + '?page='+ ${page.number + 2} + '&size=' + ${page.size}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+
+</div>

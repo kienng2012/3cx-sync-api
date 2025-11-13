@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style type="text/css">
+        label {
+            display: inline-block;
+            width: 200px;
+            margin: 5px;
+            text-align: left;
+        }
+
+        input[type=text], input[type=password], select {
+            display: inline-block;
+            width: 200px;
+        }
+
+        input[type=radio] {
+            margin-left: 45px;
+        }
+
+        input[type=checkbox] {
+            margin-right: 190px;
+        }
+
+        button {
+            padding: 5px;
+            margin: 10px;
+        }
+
+        .red-text {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    <title>Login</title>
+</head>
+<body>
+<!-- Include menu.html -->
+<!--
+<th:block th:include="/menu"></th:block>
+-->
+<div th:insert="includes/menu :: menu"></div>
+
+
+<h1>Chi tiết tài khoản</h1>
+
+<form action="#" th:action="@{/manager/show-acc-detail}" method="post" th:object="${objCanva}">
+    <input type="hidden" th:field="*{id}" id="id">
+    <label>E-mail:</label>
+    <input type="text" th:field="*{email}" readonly="true"/><br/>
+
+    <label>Password:</label>
+    <input type="text" th:field="*{password}" readonly="true" disabled="true"/><br/>
+
+    <!--
+    <label>Birthday (yyyy-mm-dd):</label>
+    <input type="text" th:field="*{birthday}"/><br/>
+
+    <label>Gender:</label>
+    <input type="radio" th:field="*{gender}" value="Male"/>Male
+    <input type="radio" th:field="*{gender}" value="Female"/>Female<br/>
+
+    <label>Profession:</label>
+    <select th:field="*{profession}">
+        <option th:each="p : ${listProfession}" th:value="${p}" th:text="${p}"/>
+    </select>
+
+    <label>Note:</label>
+    <textarea rows="5" cols="25" th:field="*{note}"></textarea>
+    <br/>
+    -->
+    <br/>
+
+    <label>Đã bán ?</label>
+    <input type="checkbox" th:field="*{isSell}"/><br/>
+
+    <label>Gía bán:</label>
+    <input type="text" th:field="*{price}"/><br/>
+
+    <label>Email khách:</label>
+    <input type="text" th:field="*{emailRef}"/><br/>
+
+    <button type="submit">Cập nhật đã bán</button>
+    <span class="red-text" th:text="${msg !=null }? ${msg} : '' "></span>
+</form>
+</body>
+
+</html>

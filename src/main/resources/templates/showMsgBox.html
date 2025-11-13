@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Settings</h1>
+<div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+</body>
+</html>

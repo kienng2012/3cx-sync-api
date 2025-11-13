@@ -1,0 +1,26 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-content">
+        <span class="closePopup" th:attr="onclick=|closePopupFunction('canvaModalDetail')|">×</span>
+        <form action="#" th:action="@{/manager/show-acc-detail}" method="post" th:object="${objCanva}">
+            <input type="hidden" th:field="*{id}" id="id">
+            <label>E-mail:</label>
+            <input type="text" th:field="*{email}" readonly="true"/><br/>
+
+            <label>Password:</label>
+            <input type="text" th:field="*{password}" readonly="true" disabled="true"/><br/>
+            <br/>
+
+            <label>Đã bán ?</label>
+            <input type="checkbox" th:field="*{isSell}"/><br/>
+
+            <label>Gía bán:</label>
+            <input type="text" th:field="*{price}"/><br/>
+
+            <label>Email khách:</label>
+            <input type="text" th:field="*{emailRef}"/><br/>
+
+            <button type="submit">Cập nhật đã bán</button>
+            <span class="red-text" th:text="${msg !=null }? ${msg} : '' "></span>
+        </form>
+    </div>
+</div>

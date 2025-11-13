@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)https://www.canvavn.store.vn/ -->
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/assets/css/backend.css" type="text/css"/>
+    <style>
+        .tbl-style td, th {
+            padding: 5px;
+            border: 1px solid;
+        }
+    </style>
+    <style>
+        .pagination ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /*background-color: #333333;*/
+        }
+
+        .pagination li {
+            float: left;
+        }
+
+        .pagination li a {
+            display: block;
+            /*color: white;*/
+            text-align: center;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        .pagination li a:hover {
+            /*background-color: #111111;*/
+            background-color: #4DC7A0;
+        }
+
+        .pagination .disabled a > span {
+            color: white;
+        !important;
+            background: #062c33;
+        !important;
+        }
+
+        .pagination .active a > span {
+            color: red;
+        !important;
+            background: yellow;
+        !important;
+        }
+    </style>
+</head>
+<body>
+<!-- JQuery from Google CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+
+    // Ref : https://riptutorial.com/thymeleaf/example/28530/replacing-fragments-with-ajax
+    // function getContent(url) {
+    //     url = url + "&typeLoad=Ajax";
+    //     //create url to request fragment
+    //     // alert(url)
+    //     //load fragment and replace content
+    //     $('#replace_div').load(url);
+    // }
+
+    function getContent(url) {
+        url = url + "&typeLoad=Ajax";
+        // alert(url)
+        $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    // $('#replace_div').load(url);
+                    $("#replace_div").html(data);
+                    // $("#tblCanva").html(data);
+
+                }
+            }
+        );
+    }
+
+    //Error seach page 2 : getContent('/admin/search-cava-by-keyword?isSell=true/admin/search-cava-by-keyword?isSell=true&keyword=ge&page=1&size=10')
+    function searchContent() {
+        let url = "/admin/search-cava-by-keyword?typeLoad=Ajax";
+        //Check if contains isSell
+        var queryString = location.search
+        let params = new URLSearchParams(queryString)
+        alert(params)
+        // example of retrieving 'id' parameter
+        let isSellParam = params.get("isSell")
+        console.log(isSellParam)
+        if (typeof isSellParam !== "undefined") {
+            url = url + "&isSell=" + Boolean(isSellParam);
+        }
+        let keyword = document.getElementsByName('txtKeyword')[0].value;
+        if (typeof keyword !== "undefined") {
+            url += "&keyword=" + keyword;
+        }
+        alert(url)
+        $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    // $('#replace_div').load(url);
+                    $("#replace_div").html(data);
+                    // $("#tblCanva").html(data);
+
+                }
+            }
+        );
+    }
+
+
+    function openCanvaModal(id, email) {
+        var url = '/manager/show-acc-detail-modal?id=' + id + '&email=' + email;
+        // alert(url)
+        $.ajax({
+            url: url,
+            beforeSend: function () {
+                $(".modalLoadingAjax").show();
+            },
+            success: function (data) {
+                $(".modalLoadingAjax").hide();
+                //Show acc canva detail
+                let modal_show = document.getElementById("canvaModalDetail");
+                modal_show.style.display = "block";
+                $("#canvaModalDetail").html(data);
+                // $("#canvaModalFragment").modal("show")
+            }
+        });
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    function closePopupFunction(element) {
+        // alert(element)
+        let modal_show = document.getElementById(element);
+        modal_show.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        let modal_show = document.getElementById("canvaModalDetail");
+        if (event.target == modal_show) {
+            modal_show.style.display = "none";
+        }
+    }
+
+</script>
+<!-- Include menu.html -->
+<th:block th:include="includes/menu :: menu"></th:block>
+
+<!-- Loading icon when using ajax -->
+<div th:insert="common/ajax/loadingIconAjax"></div>
+
+<!-- id ="replace_div" will reload -->
+<div class="searchDiv">
+    <input type="text" name="txtKeyword" onchange="searchContent()">
+</div>
+<div id="replace_div" th:fragment="tblCanva">
+    <div th:insert="canva/ajax/tableCanvaAjax"></div>
+</div>
+
+<div id="canvaModalDetail" class="modal">
+    <div th:insert="canva/ajax/modalCanvaDetail"></div>
+</div>
+
+</body>

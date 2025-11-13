@@ -1,0 +1,157 @@
+.random-main {
+    background-image: url("../images/nen.png");
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.random-title{
+    color: rgba(0, 102, 204, 1);
+    font-size: 37px;
+    margin-top: 40px;
+    line-height: 38px;
+}
+.random-button-main{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+.random-button{
+    height: 180px;
+    width: 180px;
+    background-color: rgba(234, 5, 3, 1);
+    border-radius: 50%;
+    border: 5px solid #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 35px;
+    color: #fff;
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+}
+.random-button:active {
+    transform: scale(0.8); 
+}
+
+.number-slot {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.number-column {
+    width: 90px;
+    height: 120px;
+    font-size: 60px;
+    color: rgba(234, 5, 3, 1);
+    border: 2px solid #000;
+    background-color: #ebeaeb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.radom-infor-main{
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+    overflow-x: hidden;
+    height: 0;
+}
+
+.radom-infor-main.show {
+    opacity: 1;
+    height: 100%;
+    margin-top: 40px;
+}
+.random-button-main.show {
+    opacity: 1;
+    margin-top: 0;
+}
+
+.radom-infor{
+    color: #000;
+    font-weight: bold;
+    border-radius: 15px;
+    border: 3px solid rgba(255, 6, 6, 1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*height: 180px;*/
+    width: 600px;
+    background-color: #fcf7d9;
+    box-shadow: 3px 4px 8.6px 0px rgba(0, 0, 0, 0.25);
+   
+}
+.radom-infor-phone{
+    margin-bottom: 0;
+    font-size: 32px;
+}
+.radom-infor-date{
+    margin-bottom: 0;
+    font-size: 28px;
+}
+.radom-infor-product{
+    margin-bottom: 0;
+    font-size: 23px;
+}
+.radom-infor-company{
+    margin-bottom: 0;
+    font-size: 23px;
+}
+.random-title{
+    margin-top: 90px;
+}
+.random-button-main{
+    margin-top: 90px;
+}
+.radom-infor-main.show {
+    margin-top: 90px;
+}
+.number-slot {
+    margin-top: 90px;
+}
+@media only screen and (max-width: 1289px) {
+    .random-title{
+        margin-top: 80px;
+    }
+    .random-button-main{
+        margin-top: 80px;
+    }
+    .radom-infor-main.show {
+        margin-top: 80px;
+    }
+    .number-slot {
+        margin-top: 80px;
+    }
+  }
+@media only screen and (max-width: 1025px) {
+    .random-main {
+        display: flex;
+        align-items: center;
+    }
+    .random-title{
+        margin-top: 40px;
+    }
+    .random-button-main{
+        margin-top: 40px;
+    }
+    .radom-infor-main.show {
+        margin-top: 40px;
+    }
+    .number-slot {
+        margin-top: 40px;
+    }
+  }

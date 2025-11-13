@@ -1,0 +1,80 @@
+<div th:fragment="paging" xmlns:th="http://www.thymeleaf.org">
+    <div th:if="${#strings.contains(url,'?')}">
+        <div class='pagination pagination-centered'>
+            <ul>
+                <li th:class="${page.first}? 'disabled' : ''">
+                    <a th:if="${page.first}"><span>← First</span></a>
+                    <!--
+                    <a th:if="${not page.first}"
+                       th:onclick="getContent('/manager/show-all-account-ajax?isSell=false&page=4&size=10')">←
+                        First</a>
+                        -->
+                    <a th:if="${not page.first}"
+                       th:attr="onclick=|getContent('${url}&page=1&size=${page.getSize}')|">←
+                        First</a>
+                </li>
+                <li th:class="${page.first}? 'disabled' : '' ">
+                    <a th:if="${page.first}"><span>«</span></a>
+                    <a th:if="${not page.first}"
+                       th:attr="onclick=|getContent('${url}&page=${page.number}&size=${page.getSize}')|">«
+                    </a>
+                </li>
+                <li th:each="item : ${page.relatedPages}" th:class="${item== page.number+1}? 'active' : ''">
+                    <a th:attr="onclick=|getContent('${url}&page=${item}&size=${page.getSize}')|" th:value="${item}">
+                        <span th:text="${item}"></span> </a>
+                </li>
+                <li th:class="${page.last}? 'disabled' : '' ">
+                    <a th:if="${page.last}"><span>»</span></a>
+                    <a th:if="${not page.last}"
+                       th:attr="onclick=|getContent('${url}&page=${page.number+2}&size=${page.getSize}')|">»</a>
+                </li>
+
+                <li th:class="${page.last}? 'disabled' : ''">
+                    <a th:if="${page.last}"><span>Last →</span></a>
+                    <a th:if="${not page.last}"
+                       th:attr="onclick=|getContent('${url}&page=${page.totalPages}&size=${page.getSize}')|">Last →</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div th:unless="${#strings.contains(url,'?')}">
+        <div class='pagination pagination-centered'>
+            <ul>
+                <li th:class="${page.first}? 'disabled' : ''">
+                    <a th:if="${page.first}"><span>← First</span></a>
+                    <!--
+                    <a th:if="${not page.first}"
+                       th:onclick="getContent('/manager/show-all-account-ajax?isSell=false&page=4&size=10')">←
+                        First</a>
+                        -->
+                    <a class="btnPaging" th:if="${not page.first}"
+                       th:attr="onclick=|getContent('${url}?page=1&size=${page.getSize}')|">←
+                        First</a>
+                </li>
+                <li th:class="${page.first}? 'disabled' : '' ">
+                    <a th:if="${page.first}"><span>«</span></a>
+                    <a th:if="${not page.first}"
+                       th:attr="onclick=|getContent('${url}?page=${page.number}&size=${page.getSize}')|">«
+                    </a>
+                </li>
+                <li th:each="item : ${page.relatedPages}" th:class="${item== page.number+1}? 'active' : ''">
+                    <a th:attr="onclick=|getContent('${url}?page=${item}&size=${page.getSize}')|" th:value="${item}">
+                        <span th:text="${item}"></span> </a>
+                </li>
+                <li th:class="${page.last}? 'disabled' : '' ">
+                    <a th:if="${page.last}"><span>»</span></a>
+                    <a th:if="${not page.last}" class="btnPaging"
+                       th:attr="onclick=|getContent('${url}?page=${page.number+2}&size=${page.getSize}')|">»</a>
+                </li>
+
+                <li th:class="${page.last}? 'disabled' : ''">
+                    <a th:if="${page.last}"><span>Last →</span></a>
+                    <a th:if="${not page.last}"
+                       th:attr="onclick=|getContent('${url}?page=${page.totalPages}&size=${page.getSize}')|">Last →</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

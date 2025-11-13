@@ -1,0 +1,88 @@
+<div th:fragment="paging" xmlns:th="http://www.thymeleaf.org">
+    <div th:if="${#strings.contains(url,'?')}">
+        <div class='pagination pagination-centered'>
+            <ul>
+                <li th:class="${page.first}? 'disabled' : ''">
+                    <a th:if="${page.first}"><span>← First</span></a>
+                    <a th:if="${not page.first}" th:href="${url} + '&page=1'+ '&size=' + ${page.size}">← First</a>
+                </li>
+                <li th:class="${page.first}? 'disabled' : '' ">
+                    <a th:if="${page.first}"><span>«</span></a>
+                    <a th:if="${not page.first}"
+                       th:href="${url} + '&page='+ ${page.number} + '&size=' + ${page.getSize}"
+                       title='Go to previous page'>«</a>
+                </li>
+
+                <!--
+                <li th:each="item : ${page.number+4}">
+                    <a
+                            th:href="${url} + '&page='+ ${item} + '&size=' + ${page.size}"
+                            title='Go to previous page'>item</a>
+                </li>
+                -->
+                <li th:each="item : ${page.relatedPages}" th:class="${item== page.number+1}? 'active' : ''">
+                    <a th:href="${url} + '&page='+ ${item} + '&size=' + ${page.size}"
+                       th:value="${item}"><span th:text="${item}"></span> </a>
+                </li>
+
+
+                <!--
+                <li th:each="item : ${page.items}" th:class="${item.current}? 'active' : ''">
+                <span th:if="${item.current}" th:text='${item.number}'>1</span>
+                <a th:if='${not item.current}' th:href='@{${page.url}(page.page=${item.number},page.size=${page.size})}'><span th:text='${item.number}'>1</span></a>
+                </li>
+                -->
+
+
+                <li th:class="${page.last}? 'disabled' : '' ">
+                    <a th:if="${page.last}"><span>»</span></a>
+                    <a th:if="${not page.last}"
+                       th:href="${url} + '&page='+ ${page.number+2} + '&size=' + ${page.getSize}"
+                       title='Go to next page'>»</a>
+                </li>
+
+                <li th:class="${page.last}? 'disabled' : ''">
+                    <a th:if="${page.last}"><span>Last →</span></a>
+                    <a th:if="${not page.last}"
+                       th:href="${url} + '&page='+ ${page.totalPages} + '&size=' + ${page.getSize}">Last →</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div th:unless="${#strings.contains(url,'?')}">
+        <div class='pagination pagination-centered'>
+            <ul>
+                <li th:class="${page.first}? 'disabled' : ''">
+                    <a th:if="${page.first}"><span>← First</span></a>
+                    <a th:if="${not page.first}" th:href="${url} + '?page=1'+ '&size=' + ${page.size}">← First</a>
+                </li>
+                <li th:class="${page.first}? 'disabled' : '' ">
+                    <a th:if="${page.first}"><span>«</span></a>
+                    <a th:if="${not page.first}"
+                       th:href="${url} + '?page='+ ${page.number} + '&size=' + ${page.getSize}"
+                       title='Go to previous page'>«</a>
+                </li>
+
+                <li th:each="item : ${page.relatedPages}" th:class="${item== page.number+1}? 'active' : ''">
+                    <a th:href="${url} + '?page='+ ${item} + '&size=' + ${page.size}"
+                       th:value="${item}"><span th:text="${item}"></span> </a>
+                </li>
+
+                <li th:class="${page.last}? 'disabled' : '' ">
+                    <a th:if="${page.last}"><span>»</span></a>
+                    <a th:if="${not page.last}"
+                       th:href="${url} + '?page='+ ${page.number+2} + '&size=' + ${page.getSize}"
+                       title='Go to next page'>»</a>
+                </li>
+
+                <li th:class="${page.last}? 'disabled' : ''">
+                    <a th:if="${page.last}"><span>Last →</span></a>
+                    <a th:if="${not page.last}"
+                       th:href="${url} + '?page='+ ${page.totalPages} + '&size=' + ${page.getSize}">Last →</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

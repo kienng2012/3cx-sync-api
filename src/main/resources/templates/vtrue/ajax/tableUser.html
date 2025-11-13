@@ -1,0 +1,36 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div class="table-responsive">
+
+
+        <span th:if="${objMaTrungThuong==null}">
+                    <span th:if="${msgError!=null}"><span th:text="${msgError}"></span></span>
+        </span>
+        <table class="table table-striped table-bordered table-hover" th:if="${objMaTrungThuong!=null}">
+            <thead>
+            <tr>
+                <th> ID</th>
+                <th> Mã Tem</th>
+                <th> Mã Sản Phẩm</th>
+                <th> Tên Sản Phẩm</th>
+                <th> Mã Doanh Nghiệp</th>
+                <th> Tên Doanh Nghiệp</th>
+                <th> Số điện thoại</th>
+                <th> Ngày xác thực</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><span th:text="${objMaTrungThuong.ID}"></span></td>
+                <td><span th:text="${objMaTrungThuong.maTem}"> </span></td>
+                <td><span th:text="${objMaTrungThuong.maSP}"></span></td>
+                <td><span th:text="${objMaTrungThuong.tenSP}"></span></td>
+                <td><span th:text="${objMaTrungThuong.maDN}"></span></td>
+                <td><span th:text="${objMaTrungThuong.tenDN}"></span></td>
+                <td><span th:text="${objMaTrungThuong.soDienThoai}"></span></td>
+                <td><span th:text="${objMaTrungThuong.NgayXacThuc}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

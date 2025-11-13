@@ -1,0 +1,119 @@
+<div th:fragment="paging" xmlns:th="http://www.thymeleaf.org">
+    <!--
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
+                 aria-relevant="all">Showing 1 to 10 of 57 entries
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
+                <ul class="pagination">
+                    <li class="paginate_button previous disabled" aria-controls="dataTables-example" tabindex="0"
+                        id="dataTables-example_previous"><a href="#">Previous</a></li>
+                    <li class="paginate_button active" aria-controls="dataTables-example" tabindex="0"><a href="#">1</a>
+                    </li>
+                    <li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">2</a></li>
+                    <li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">3</a></li>
+                    <li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">4</a></li>
+                    <li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">5</a></li>
+                    <li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">6</a></li>
+                    <li class="paginate_button next" aria-controls="dataTables-example" tabindex="0"
+                        id="dataTables-example_next"><a href="#">Next</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
+                 aria-relevant="all">
+<!--                Showing 1 to 10 of 57 entries-->
+            </div>
+        </div>
+        <div class="col-sm-6 pagination-right">
+            <div th:if="${#strings.contains(url,'?')}">
+                <div class='pagination pagination-centered'>
+                    <ul>
+                        <li th:class="${page.first}? 'disabled' : ''">
+                            <a th:if="${page.first}"><span> ← First</span></a>
+                            <!--
+                            <a th:if="${not page.first}"
+                               th:onclick="getContent('/manager/show-all-account-ajax?isSell=false&page=4&size=10')">←
+                                First</a>
+                                -->
+                            <a th:if="${not page.first}"
+                               th:attr="onclick=|getContent('${url}&page=1&size=${page.getSize}')|">←
+                                First</a>
+                        </li>
+                        <li th:class="${page.first}? 'disabled' : '' ">
+                            <a th:if="${page.first}"><span>«</span></a>
+                            <a th:if="${not page.first}"
+                               th:attr="onclick=|getContent('${url}&page=${page.number}&size=${page.getSize}')|">«
+                            </a>
+                        </li>
+                        <li th:each="item : ${page.relatedPages}" th:class="${item== page.number+1}? 'active' : ''">
+                            <a th:attr="onclick=|getContent('${url}&page=${item}&size=${page.getSize}')|"
+                               th:value="${item}">
+                                <span th:text="${item}"></span> </a>
+                        </li>
+                        <li th:class="${page.last}? 'disabled' : '' ">
+                            <a th:if="${page.last}"><span>»</span></a>
+                            <a th:if="${not page.last}"
+                               th:attr="onclick=|getContent('${url}&page=${page.number+2}&size=${page.getSize}')|">»</a>
+                        </li>
+
+                        <li th:class="${page.last}? 'disabled' : ''">
+                            <a th:if="${page.last}"><span>Last →</span></a>
+                            <a th:if="${not page.last}"
+                               th:attr="onclick=|getContent('${url}&page=${page.totalPages}&size=${page.getSize}')|">Last
+                                →</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:unless="${#strings.contains(url,'?')}">
+                <div class='pagination pagination-centered'>
+                    <ul>
+                        <li th:class="${page.first}? 'disabled' : ''">
+                            <a th:if="${page.first}"><span>← First</span></a>
+                            <!--
+                            <a th:if="${not page.first}"
+                               th:onclick="getContent('/manager/show-all-account-ajax?isSell=false&page=4&size=10')">←
+                                First</a>
+                                -->
+                            <a class="btnPaging" th:if="${not page.first}"
+                               th:attr="onclick=|getContent('${url}?page=1&size=${page.getSize}')|">←
+                                First</a>
+                        </li>
+                        <li th:class="${page.first}? 'disabled' : '' ">
+                            <a th:if="${page.first}"><span>«</span></a>
+                            <a th:if="${not page.first}"
+                               th:attr="onclick=|getContent('${url}?page=${page.number}&size=${page.getSize}')|">«
+                            </a>
+                        </li>
+                        <li th:each="item : ${page.relatedPages}" th:class="${item== page.number+1}? 'active' : ''">
+                            <a th:attr="onclick=|getContent('${url}?page=${item}&size=${page.getSize}')|"
+                               th:value="${item}">
+                                <span th:text="${item}"></span> </a>
+                        </li>
+                        <li th:class="${page.last}? 'disabled' : '' ">
+                            <a th:if="${page.last}"><span>»</span></a>
+                            <a th:if="${not page.last}" class="btnPaging"
+                               th:attr="onclick=|getContent('${url}?page=${page.number+2}&size=${page.getSize}')|">»</a>
+                        </li>
+
+                        <li th:class="${page.last}? 'disabled' : ''">
+                            <a th:if="${page.last}"><span>Last →</span></a>
+                            <a th:if="${not page.last}"
+                               th:attr="onclick=|getContent('${url}?page=${page.totalPages}&size=${page.getSize}')|">Last
+                                →</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

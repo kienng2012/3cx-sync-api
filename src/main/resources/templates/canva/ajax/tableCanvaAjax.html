@@ -1,0 +1,32 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <table class="tbl-style">
+        <thead>
+        <tr>
+            <th> Id</th>
+            <th> Email</th>
+            <th> Password</th>
+            <th> Trạng thái</th>
+            <th> Giá</th>
+            <th> Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${accCanvas.empty}">
+            <td colspan="2"> No Account Available</td>
+        </tr>
+        <tr th:each="obj : ${accCanvas}">
+            <td><span th:text="${obj.id}"></span></td>
+            <td><span th:text="${obj.email}"> </span></td>
+            <td><span th:text="${#strings.substring(obj.password,0,3)}"></span>***</td>
+            <td><span th:text="${obj.isSell!=null && obj.isSell ==true}?'Đã bán':'Chưa bán'"></span></td>
+            <td><span th:text="${obj.price}"> </span></td>
+            <!--            <td><span></span><a th:href="@{'/manager/show-acc-detail?id='+${obj.id}+'&email='+ ${obj.email}}">Bán</a>-->
+            <td><span></span>
+
+                <button th:attr="onclick=|openCanvaModal('${obj.id}','${obj.email}')|">Show</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:insert="includes/pagingAjax :: paging"></div>
+</div>

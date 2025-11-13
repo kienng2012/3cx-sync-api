@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Danh sách khách hàng</title>
+    <style>
+        /*
+        body {font-family: Arial, Helvetica, sans-serif;}
+        * {box-sizing: border-box;}
+
+
+        .open-button {
+            background-color: #555;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+            position: fixed;
+            bottom: 23px;
+            right: 28px;
+            width: 280px;
+        }
+
+         */
+
+        /* The popup form - hidden by default */
+        .form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 15px;
+            border: 3px solid #f1f1f1;
+            z-index: 9;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Add styles to the form container */
+        .form-container {
+            max-width: 300px;
+            padding: 10px;
+            background-color: white;
+            /** Them */
+            margin: auto;
+            margin-top: 500px;
+        }
+
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        /* When the inputs get focus, do something */
+        .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        function openForm() {
+            document.getElementById("myForm").style.display = "block";
+        }
+
+        function closeForm() {
+            document.getElementById("myForm").style.display = "none";
+        }
+    </script>
+    <script>
+        //For vtrue :
+        var myInterval;
+        //For SPACE press to get lucky
+        document.body.onkeyup = function (e) {
+            if (e.key == " " ||
+                e.code == "Space" ||
+                e.keyCode == 32
+            ) {
+                beginQuayThuong();
+                //For ESC to restart
+            } else if (e.key == "Escape" ||
+                e.code == "Escape" ||
+                e.keyCode == 27
+            ) {
+                alert("Reset now ...")
+                resetFormQuayThuong();
+            }
+        }
+
+        function resetFormQuayThuong() {
+            document.querySelector('#btQuay').value = 'QUAY';
+            document.getElementById("resultQuayThuong").innerHTML = "";
+            document.getElementById("random_number").innerHTML = "";
+            document.getElementById("msgUpdate").innerHTML = "";
+
+        }
+
+        function processSecretPhone(phone) {
+
+            const newPhone = phone.indexOf('84') == 0 ? phone.replace('84', '0') : phone;
+            //alert(newPhone);
+            return newPhone.substring(0, 4) + "***" + newPhone.substring(7, 11);
+        }
+
+        function formatDateStr(dateStr) {
+            //alert(dateStr);
+            var date = new Date(dateStr);
+           // alert(date);
+            var year = date.getFullYear().toString();
+            var month = (date.getMonth() + 101).toString().substring(1);
+            var day = (date.getDate() + 100).toString().substring(1);
+            return day + "-" + month + "-" + year;
+
+        }
+
+        function beginQuayThuong() {
+            if (document.getElementById("btQuay").value == 'QUAY') {
+                document.getElementById("resultQuayThuong").innerHTML = "";
+                document.querySelector('#btQuay').value = 'DỪNG';
+                myInterval = setInterval(myTimer, 20); //Thiet lap toc do quay cua so . cang nho cang nhanh
+                //https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_popup_form
+                // document.getElementById("myForm").style.display = "none";
+                closeForm();
+            } else if (document.getElementById("btQuay").value == 'DỪNG') {
+                /*  alert('Dung lai day thoi ^-^');*/
+                document.querySelector('#btQuay').value = 'DỪNG';
+                /*  clearInterval(myInterval);*/
+                /*document.getElementById("btQuay").disabled = true; //Disable click*/
+                var dataValue = {"to": "84967891610"};
+                $.ajax({
+                    /* type: "POST",*/
+                    /*url: "https://api.mobilebranding.vn/api/SMSBrandname/SendSMS",*/
+                    type: "GET",
+                    url: "/manager/getRandomLucky?typeLoad=Ajax&typeAction=1",
+                    data: dataValue,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        clearInterval(myInterval);
+                        alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    },
+                    success: function (result) {
+                        // alert("We returned: " + result.maTem);
+                        clearInterval(myInterval);
+                        // var parsedData = JSON.parse(result);
+                        // document.getElementById("random_number").innerHTML = parsedData.status;
+                        document.getElementById("random_number").innerHTML = result.maTem;
+                        document.getElementById("resultQuayThuong").innerHTML = " Số điện thoại: " + result.soDienThoai + " \n" + ". Thời gian xác thực : " + result.ngayXacThuc + " \n";
+                        // $("btQuay").attr("disabled", true);
+                        //document.getElementById("stampCodeLucky").innerHTML = result.maTem;
+                        document.getElementById("thoiGianXacThuc").innerHTML = formatDateStr(result.ngayXacThuc);
+                        // document.getElementById("SoDTKH").innerHTML = result.soDienThoai;
+                        document.getElementById("SoDTKH").innerHTML = processSecretPhone(result.soDienThoai);
+
+                        document.getElementById("stampCodeLucky").value = result.maTem;
+                        document.getElementById("myForm").style.display = "block";
+                        openForm();
+                        // $("#replaceDiv").html(result);
+
+                    }
+                });
+                document.querySelector('#btQuay').value = 'QUAY';
+
+            } else {
+                //alert('BẠN ĐÃ QUAY XONG. VUI LÒNG LOAD LẠI TRANG, hoặc click vào đây ^-^');
+                document.querySelector('#btQuay').value = 'QUAY';
+            }
+
+            ////alert('Bat dau nhe ^-^ ');
+            //if (document.getElementById("btQuay").value == 'START') {
+            //    document.querySelector('#btQuay').value = 'STOP';
+            //   /* alert('Quay nao ^-^ ');*/
+            //    const  myInterval = setInterval(myTimer, 50);
+            //}
+            //else if (document.getElementById("btQuay").value == 'STOP') {
+            //    alert('Dung lai day thoi ^-^');
+            //    document.querySelector('#btQuay').value = 'END';
+            //    clearInterval(myInterval);
+            //}
+            //else {
+            //    alert('BẠN ĐÃ QUAY XONG. VUI LÒNG LOAD LẠI TRANG, hoặc click vào đây ^-^');
+            //    document.querySelector('#btQuay').value = 'START';
+            //}
+        }
+
+        function makeLuckyStamp() {
+            // const stampCode = document.getElementById("stampCodeLucky");
+            const stampCode = $('#stampCodeLucky').val();
+
+            // var dataValue = "{maTem:"+ stampCode+"}";
+            const dataValue = JSON.stringify({"maTem": stampCode});
+            alert(dataValue);
+            $.ajax({
+                /* type: "POST",*/
+                /*url: "https://api.mobilebranding.vn/api/SMSBrandname/SendSMS",*/
+                type: "POST",
+                url: "/manager/makeLuckyByStampCode",
+                data: dataValue,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                },
+                success: function (result) {
+                    alert("Call success");
+                    closeForm();
+                    document.getElementById("msgUpdate").innerHTML = "Cập nhật dữ liệu thành công!";
+                }
+            });
+        }
+
+        //setInterval(function () {
+        //    var t = Math.round(Math.random() * (1000 - 1) + 1);
+        //    document.getElementById("random_number").innerHTML = t;
+        //}, 50);
+
+        function myStopFunction() {
+            clearInterval(myInterval);
+        }
+
+        function myTimer() {
+            //const date = new Date();
+            //document.getElementById("random_number").innerHTML = date.toLocaleTimeString();
+            var t = Math.round(Math.random() * (10000000000 - 1) + 1); //Thiet lap xem max bao nhieu so hien thi ngau nhien
+            //var t = Math.round(Math.random() * (100) + 1);
+            /*     var t = Math.floor(Math.random() * 100) + 1*/
+            document.getElementById("random_number").innerHTML = t;
+        }
+
+        //TODO Kienng fix click menu
+
+        $("#sideNav").click(function () {
+            if ($(this).hasClass('closed')) {
+                $('.navbar-side').animate({left: '0px'});
+                $(this).removeClass('closed');
+                $('#page-wrapper').animate({'margin-left': '260px'});
+
+            } else {
+                $(this).addClass('closed');
+                $('.navbar-side').animate({left: '-260px'});
+                $('#page-wrapper').animate({'margin-left': '0px'});
+            }
+        });
+
+
+        //Get table using ajax
+        function getContent(url) {
+            url = url + "&typeLoad=Ajax";
+            // alert(url)
+            $.ajax({
+                    url: url,
+                    beforeSend: function () {
+                        $(".modalLoadingAjax").show();
+                    },
+                    success: function (data) {
+                        $(".modalLoadingAjax").hide();
+                        // $('#replaceDiv').load(url);
+                        $("#replaceDiv").html(data);
+                        // $("#replaceFragment").html(data);
+
+                    }
+                }
+            );
+        }
+
+        //Error seach page 2 : getContent('/admin/search-cava-by-keyword?isSell=true/admin/search-cava-by-keyword?isSell=true&keyword=ge&page=1&size=10')
+        function searchContent() {
+            let url = "/manager/userUsingLayout?typeLoad=Ajax";
+            //Check if contains isSell
+            var queryString = location.search
+            let params = new URLSearchParams(queryString)
+            // alert(params)
+            // example of retrieving 'id' parameter
+            let isEnableParam = params.get("isEnable")
+            console.log(isEnableParam)
+            alert(isEnableParam)
+            if (typeof isEnableParam != "undefined" && isEnableParam != null) {
+                url = url + "&isEnable=" + Boolean(isEnableParam);
+            } else {
+                url = url + "&isEnable=" + Boolean("true"); //Default set true
+            }
+            let keyword = document.getElementsByName('txtKeyword')[0].value;
+            if (typeof keyword !== "undefined") {
+                url += "&keyword=" + keyword;
+            }
+            alert(url)
+            $.ajax({
+                    url: url,
+                    beforeSend: function () {
+                        $(".modalLoadingAjax").show();
+                    },
+                    success: function (data) {
+                        $(".modalLoadingAjax").hide();
+                        // $('#replaceDiv').load(url);
+                        $("#replaceDiv").html(data);
+                        // $("#replaceFragment").html(data);
+                    }
+                }
+            );
+        }
+
+
+        /**
+         * Allow edit
+         * @param id
+         */
+        function openModal(id, typeAction) {
+            let url;
+            if (typeof typeAction != 'undefined' && typeAction != null) {
+                url = '/manager/vtrue/detail?id=' + id + '&typeAction=' + typeAction;
+            } else {
+                url = '/manager/vtrue/detail?id=' + id;
+            }
+            alert(url)
+            $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    //Show acc canva detail
+                    let modal_show = document.getElementById("modalDetailId");
+                    modal_show.style.display = "block";
+                    $("#modalDetailId").html(data);
+                    // $("#canvaModalFragment").modal("show")
+                }
+            });
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        function closePopupFunction(element) {
+            // alert(element)
+            let modal_show = document.getElementById(element);
+            modal_show.style.display = "none";
+            location.reload();//Reload lai trang
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            let modal_show = document.getElementById("modalDetailId");
+            if (event.target == modal_show) {
+                modal_show.style.display = "none";
+                location.reload();
+            }
+        }
+
+
+        function updateUser(id, typeAction) {
+            let url;
+            if (typeof typeAction != 'undefined' && typeAction != null) {
+                url = '/manager/vtrue/detail?id=' + id + '&typeAction=' + typeAction;
+            } else {
+                url = '/manager/vtrue/detail?id=' + id;
+            }
+            alert(url)
+            $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    //Show acc canva detail
+                    let modal_show = document.getElementById("modalDetailId");
+                    modal_show.style.display = "block";
+                    $("#modalDetailId").html(data);
+                    // $("#canvaModalFragment").modal("show")
+                }
+            });
+        }
+
+    </script>
+
+    <script th:inline="javascript">
+        function updateUserAjax() {
+            alert('Update begin ...');
+            let userId = document.getElementById("userId").value;
+            let username = document.getElementById("username").value;
+            let company = document.getElementById("company").value;
+            let email = document.getElementById("email").value;
+            // alert(email)
+            let enable = document.getElementById("enable1").value;
+            let prepaid = document.getElementById("prepaid1").value;
+            // alert(prepaid)
+            let cashBalance = document.getElementById("cashBalance").value;
+            let currency = document.getElementById("currency").value;
+            let fullname = document.getElementById("fullname").value;
+            let phone = document.getElementById("phone").value;
+            let allowSocialMsg = document.getElementById("allowSocialMsg1").value;
+            let messageDouble = document.getElementById("messageDouble1").value;
+            let notification = document.getElementById("notification").value;
+            // alert('manager/vtrue/editUserPopup')
+            $.ajax({
+                method: "POST",
+                // url: "/manager/userUsingAjax",
+                url: "/manager/vtrue/editUserPopup",
+                data: {
+                    userId: userId
+                    , username: username
+                    , company: company
+                    , email: email
+                    , enable: enable
+                    , prepaid: prepaid
+                    , cashBalance: cashBalance
+                    , currency: currency
+                    , fullname: fullname
+                    , phone: phone
+                    , allowSocialMsg: allowSocialMsg
+                    , messageDouble: messageDouble
+                    , notification: notification
+                }
+            })
+                .done(function (msg) {
+                    // alert("Data Saved: " + msg);
+                    // <span class="red-text" id="msg">Cập nhật thành công!</span>
+                    console.log("Success1 : " + msg)
+                    document.getElementById("msg").value = "Cập nhật thành công!"
+                    $('#msg').text("Cập nhật thành công!");
+                    console.log("OK : " + msg)
+                });
+        }
+
+
+    </script>
+</head>
+
+<body>
+
+<div layout:fragment="custom-content">
+    <!-- Include menu.html -->
+    <!--    <th:block th:include="includes/menu :: menu"></th:block>--0->
+
+    <!-- Loading icon when using ajax -->
+    <div th:insert="common/ajax/loadingIconAjax"></div>
+
+    <!-- id ="replaceDiv" will reload -->
+    <div id="content_about">
+        <div class="about_sec1">
+            <section id="quay" style="height: auto !important;">
+                <div class="accordion cmn-accordion element-hungnh" id="accordionExample"
+                     style="height: auto !important;">
+                    <div class="select-number-area" style="height: auto !important;">
+                        <!--
+                        <h3 class="title">CHỌN SỐ NGẪU NHIÊN</h3>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td style="font-weight: bold;">
+                                    <input type="radio" id="chk3O" checked="checked" onchange="Chon3O()">
+                                    &nbsp; Chọn số
+                                </td>
+                                <td style="text-align: left; font-weight: bold;">
+                                    <input type="radio" id="chk2O" onchange="Chon2O()">
+                                    &nbsp; Nhập số
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                        -->
+                        <div class="cmn-form login-form">
+                            <div id="div2O" style="display: none; padding-top: 2%; padding-bottom: 2%">
+                                <div class="frm-group">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td style="width: 80px;">Nhập vào:</td>
+                                            <td>
+                                                    <textarea id="txtareadayso"
+                                                              placeholder="Các số cách nhau dấu phẩy. VD: 01,34,78,89,90"
+                                                              style="resize: none; font-size: 13.5px; width: 90%;"></textarea>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="frm-group" style="padding-bottom: 6%">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td style="width: 23%">Tốc độ:</td>
+                                            <td style="width: 20%">
+                                                <select id="slTocDo2"
+                                                        style="padding: 1px 1px 1px 23px; height: 40px; width: 100%; border-radius: 6px;">
+                                                    <option value="3">3</option>
+                                                    <option value="5">5</option>
+                                                    <option value="8">8</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                </select>
+                                            </td>
+                                            <td>&nbsp;giây
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="frm-group" style="display: none">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td style="width: 80px;">Số lượng:</td>
+                                            <td>
+                                                <input type="text" value="1" id="SoLuongToiDa2"
+                                                       placeholder="(Tối đa 100 số)"
+                                                       onkeypress="return integerJsInputControl(event);">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <form>
+                                <!--
+                                <div id="dv3O">
+                                    <div class="frm-group" style="margin-top: 10px;">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+
+                                                <td>Từ số:
+                                                    <br>
+                                                    <input type="text" value="1"
+                                                           id="true-random-integer-generator-min"
+                                                           placeholder="Số nhỏ nhất"
+                                                           onkeypress="return integerJsInputControl(event);"
+                                                           style="width: 115px;">
+                                                </td>
+                                                <td>Đến số:
+                                                    <br>
+                                                    <input type="text" value="100"
+                                                           id="true-random-integer-generator-max"
+                                                           placeholder="Số lớn nhất"
+                                                           onkeypress="return integerJsInputControl(event);"
+                                                           style="width: 115px;">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="frm-group">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td style="width: 115px;">Thời gian quay:</td>
+                                                <td style="width: 30%">
+                                                    <select id="slTocDo"
+                                                            style="padding: 1px 1px 1px 23px; height: 40px; width: 100%; border-radius: 6px;">
+                                                        <option value="3">3</option>
+                                                        <option value="5">5</option>
+                                                        <option value="8">8</option>
+                                                        <option value="10">10</option>
+                                                        <option value="15">15</option>
+                                                        <option value="20">20</option>
+                                                    </select>
+                                                </td>
+                                                <td>&nbsp;giây
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="frm-group" style="display: none">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>Số lượng:</td>
+                                                <td>
+                                                    <input type="text" value="1" id="SoLuongToiDa"
+                                                           placeholder="(tối đa 100 số)"
+                                                           onkeypress="return integerJsInputControl(event);">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                -->
+
+                                <!--<div style="text-align:center; max-height:100em; max-width:100em; background-color:bisque">
+                                    <div class="frm-group"
+                                         style=" padding-top: 4%; font-weight: bold; background-color: #00ff80; color: red; height: 100%; font-size: 65px; margin-top: 15px; padding: 0px; border:dotted"
+                                         id="random_number"></div>
+                                </div>
+                                -->
+                                <div style="margin:auto;text-align:center; max-height:100em; max-width:20em;">
+                                Chọn giải : <select id="chooseLuky"
+                                        style="padding: 1px 1px 1px 23px; height: 40px; width: 100%; border-radius: 6px;">
+                                    <option value="3">Giải nhất</option>
+                                    <option value="5">5</option>
+                                    <option value="8">8</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select>
+                                </div>
+                                <br/>
+
+                                <div style="margin:auto;text-align:center; max-height:100em; max-width:50em;padding-left: 1em; background-color:#00ff80;border:dotted;border-color:RED">
+                                    <div class="frm-group"
+                                         style=" font-weight: bold;  color: red; font-size: 65px;letter-spacing: 0.5em;"
+                                         id="random_number">&nbsp
+                                    </div>
+
+                                </div>
+
+                                <div style="margin:auto;text-align:center;margin-top: 10px">
+                                    <div class="frm-group"><input id="btQuay" type="button"
+                                                                  onclick="beginQuayThuong()" value="QUAY"/></div>
+                                </div>
+                                <div class="frm-group" style="display: none">
+                                    <!--<div class="alert alert-success text-center hide" role="alert" id="loadingnha" style="font-weight: bold; background-color: #ffffff; border-color: #333; color: red;">
+                                       Bấm nút quay để bắt đầu
+
+
+                                       </div>-->
+                                </div>
+
+
+                            </form>
+                            <!-- for popup result vtrue -->
+                            <div class="form-popup" id="myForm">
+                                <span id="resultQuayThuong"></span>
+                                <input type="hidden" id="stampCodeLucky" name="stampCodeLucky">
+                                <span id="msgUpdate"></span>
+                                <form class="form-container">
+                                    <br>
+                                    <h1>Chúc mừng:</h1>
+
+                                    Số điện thoại <span id="SoDTKH"></span>
+                                    <br>
+                                    Ngày xác thực :
+                                    <span id="thoiGianXacThuc"></span>
+                                   <br/>
+                                    Tên sản phẩm ?
+                                    <br/>
+                                    thuộc doanh nghiệp ?
+
+
+                                    <button type="button" class="btn" onclick="makeLuckyStamp()">Xác nhận</button>
+                                    <button type="button" class="btn cancel" onclick="closeForm()">Từ chối</button>
+                                </form>
+                            </div>
+                            <strong style="display: none"><span id="true-random-integer-generator-result">Bấm nút quay để bắt đầu</span></strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div id="replaceDiv" th:fragment="replaceFragment">
+        <div th:insert="vtrue/ajax/tableUser"></div>
+    </div>
+
+
+    <div id="modalDetailId" class="modal">
+        <div th:insert="vtrue/ajax/modalDetail"></div>
+    </div>
+
+</div>
+
+
+<!-- Mapping with tag : <th:block layout:fragment="optional"/> in layout.html . Custom script for each business -->
+<th:block th:fragment="optional">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script>
+        //Get table using ajax
+        function getContent(url) {
+            url = url + "&typeLoad=Ajax";
+            // alert(url)
+            $.ajax({
+                    url: url,
+                    beforeSend: function () {
+                        $(".modalLoadingAjax").show();
+                    },
+                    success: function (data) {
+                        $(".modalLoadingAjax").hide();
+                        // $('#replaceDiv').load(url);
+                        $("#replaceDiv").html(data);
+                        // $("#replaceFragment").html(data);
+
+                    }
+                }
+            );
+        }
+
+
+        function searchContent() {
+            let url = "/manager/user?typeLoad=Ajax";
+            //Check if contains isSell
+            var queryString = location.search
+            let params = new URLSearchParams(queryString)
+            // alert(params)
+            // example of retrieving 'id' parameter
+            let isEnableParam = params.get("isEnable")
+            console.log(isEnableParam)
+            alert(isEnableParam)
+            if (typeof isEnableParam != "undefined" && isEnableParam != null) {
+                url = url + "&isEnable=" + Boolean(isEnableParam);
+            } else {
+                url = url + "&isEnable=" + Boolean("true"); //Default set true
+            }
+            let keyword = document.getElementsByName('txtKeyword')[0].value;
+            if (typeof keyword !== "undefined") {
+                url += "&keyword=" + keyword;
+            }
+            alert(url)
+            $.ajax({
+                    url: url,
+                    beforeSend: function () {
+                        $(".modalLoadingAjax").show();
+                    },
+                    success: function (data) {
+                        $(".modalLoadingAjax").hide();
+                        // $('#replaceDiv').load(url);
+                        $("#replaceDiv").html(data);
+                        // $("#replaceFragment").html(data);
+                    }
+                }
+            );
+        }
+
+
+        function openModal(id, email) {
+            var url = '/manager/vtrue/detail?id=' + id;
+            alert(url)
+            $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    //Show acc canva detail
+                    let modal_show = document.getElementById("modalDetailId");
+                    modal_show.style.display = "block";
+                    $("#modalDetailId").html(data);
+                    // $("#canvaModalFragment").modal("show")
+                }
+            });
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        function closePopupFunction(element) {
+            // alert(element)
+            let modal_show = document.getElementById(element);
+            modal_show.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            let modal_show = document.getElementById("modalDetailId");
+            if (event.target == modal_show) {
+                modal_show.style.display = "none";
+            }
+        }
+    </script>
+</th:block>
+
+
+<script>
+    $("#sideNav").click(function () {
+        if ($(this).hasClass('closed')) {
+            $('.navbar-side').animate({left: '0px'});
+            $(this).removeClass('closed');
+            $('#page-wrapper').animate({'margin-left': '260px'});
+
+        } else {
+            $(this).addClass('closed');
+            $('.navbar-side').animate({left: '-260px'});
+            $('#page-wrapper').animate({'margin-left': '0px'});
+        }
+    });
+</script>
+</body>
+
+</html>
+
+
+

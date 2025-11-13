@@ -1,0 +1,269 @@
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    /*padding: 20px;
+    border: 1px solid #888;
+     width: 80%;
+    */
+    border-color: #bce8f1;
+
+    margin-bottom: 20px;
+}
+
+.modal-content-80 {
+    width: 80% !important
+}
+
+.modal-content-full {
+    width: 100% !important
+}
+
+.modal-content > .content {
+    padding: 20px;
+}
+
+.modal-content > .panel-heading {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.panel-heading {
+    /* padding: 15px 15px 0px; */
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.pannel-heading > .pannel-text {
+    text-align: center;
+}
+
+/* END MODAL */
+.red-text {
+    color: red;
+    font-weight: bold;
+}
+
+.error-text {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* The Close Button */
+.closePopup {
+    color: red;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 15px;
+}
+
+.closePopup:hover,
+.closePopup:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/**
+Loading icon before call ajax
+ */
+/* Show icon loading when using ajax*/
+.modalLoadingAjax {
+    position: fixed;
+    z-index: 999;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: Black;
+    filter: alpha(opacity=60);
+    opacity: 0.6;
+    -moz-opacity: 0.8;
+}
+
+.centerAjax {
+    z-index: 1000;
+    margin: 300px auto;
+    padding: 10px;
+    width: 130px;
+    background-color: White;
+    border-radius: 10px;
+    filter: alpha(opacity=100);
+    opacity: 1;
+    -moz-opacity: 1;
+}
+
+.centerAjax img {
+    height: 100px;
+    width: 100px;
+}
+
+/**
+Style paging
+ */
+.tbl-style td, th {
+    padding: 5px;
+    border: 1px solid;
+}
+
+.pagination ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /*background-color: #333333;*/
+}
+
+.pagination li {
+    float: left;
+}
+
+
+/*.pagination > li > a, .pagination > li > span {  */
+.pagination li a {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.pagination .active a {
+    /*
+
+    background: yellow;
+    */
+    color: white;
+!important;
+    background-color: #337ab7;
+!important;
+    border-color: #337ab7;
+!important;
+}
+
+.pagination .disabled a {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+
+.pagination li a:hover {
+    /*background-color: #111111;*/
+    background-color: #4DC7A0;
+}
+
+.pagination-right {
+    text-align: right;
+!important;
+    padding-left: 10px;
+}
+
+/*
+.pagination .disabled a > span {
+    color: white;
+!important;
+    background: #062c33;
+!important;
+}
+*/
+/** Max-with limit **/
+.table-responsive > table > th, td {
+    max-width: 150px;
+    word-wrap: break-word;
+}
+
+.form-group label {
+    width: 120px;
+}
+
+.form-group > div > label {
+    width: 120px;
+}
+
+
+.form-group .col-1 {
+    width: 500px;
+    display: inline-block;
+}
+
+.form-group .col-2 {
+    width: 500px;
+    display: inline-block;
+}
+
+.form-group .col-colspan2 {
+    width: 95%;
+    display: inline-block;
+}
+
+.form-group .long-width-element {
+    width: 80%;
+}
+
+.form-group .col-space {
+    width: 100px;
+    display: inline-block;
+}
+
+.form-group .col-space-checkbox {
+    width: 270px;
+    display: inline-block;
+}
+
+.float-block {
+    display: inline-block;
+}
+
+.button {
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+}
+
+.searchDiv {
+    /*text-align: right;*/
+    margin-bottom: 10px;
+    display: inline-block;
+    align-content: right;
+
+}
+
+.searchDiv input {
+    min-width: 150px;
+}
+
+
+
+
+

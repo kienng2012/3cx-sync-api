@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Danh sách khách hàng</title>
+    <script>
+        //TODO Kienng fix click menu
+
+        $("#sideNav").click(function () {
+            if ($(this).hasClass('closed')) {
+                $('.navbar-side').animate({left: '0px'});
+                $(this).removeClass('closed');
+                $('#page-wrapper').animate({'margin-left': '260px'});
+
+            } else {
+                $(this).addClass('closed');
+                $('.navbar-side').animate({left: '-260px'});
+                $('#page-wrapper').animate({'margin-left': '0px'});
+            }
+        });
+
+
+        //Get table using ajax
+        function getContent(url) {
+            url = url + "&typeLoad=Ajax";
+            // alert(url)
+            $.ajax({
+                    url: url,
+                    beforeSend: function () {
+                        $(".modalLoadingAjax").show();
+                    },
+                    success: function (data) {
+                        $(".modalLoadingAjax").hide();
+                        // $('#replaceDiv').load(url);
+                        $("#replaceDiv").html(data);
+                        // $("#replaceFragment").html(data);
+
+                    }
+                }
+            );
+        }
+
+        //Error seach page 2 : getContent('/admin/search-cava-by-keyword?isSell=true/admin/search-cava-by-keyword?isSell=true&keyword=ge&page=1&size=10')
+        function searchContent() {
+            let url = "/manager/userUsingLayout?typeLoad=Ajax";
+            //Check if contains isSell
+            var queryString = location.search
+            let params = new URLSearchParams(queryString)
+            // alert(params)
+            // example of retrieving 'id' parameter
+            let isEnableParam = params.get("isEnable")
+            console.log(isEnableParam)
+            alert(isEnableParam)
+            if (typeof isEnableParam != "undefined" && isEnableParam != null) {
+                url = url + "&isEnable=" + Boolean(isEnableParam);
+            } else {
+                url = url + "&isEnable=" + Boolean("true"); //Default set true
+            }
+            let keyword = document.getElementsByName('txtKeyword')[0].value;
+            if (typeof keyword !== "undefined") {
+                url += "&keyword=" + keyword;
+            }
+            alert(url)
+            $.ajax({
+                    url: url,
+                    beforeSend: function () {
+                        $(".modalLoadingAjax").show();
+                    },
+                    success: function (data) {
+                        $(".modalLoadingAjax").hide();
+                        // $('#replaceDiv').load(url);
+                        $("#replaceDiv").html(data);
+                        // $("#replaceFragment").html(data);
+                    }
+                }
+            );
+        }
+
+
+        /**
+         * Allow edit
+         * @param id
+         */
+        function openModal(id, typeAction) {
+            let url;
+            if (typeof typeAction != 'undefined' && typeAction != null) {
+                url = '/manager/user/detail?id=' + id + '&typeAction=' + typeAction;
+            } else {
+                url = '/manager/user/detail?id=' + id;
+            }
+            alert(url)
+            $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    //Show acc canva detail
+                    let modal_show = document.getElementById("modalDetailId");
+                    modal_show.style.display = "block";
+                    $("#modalDetailId").html(data);
+                    // $("#canvaModalFragment").modal("show")
+                }
+            });
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        function closePopupFunction(element) {
+            // alert(element)
+            let modal_show = document.getElementById(element);
+            modal_show.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            let modal_show = document.getElementById("modalDetailId");
+            if (event.target == modal_show) {
+                modal_show.style.display = "none";
+            }
+        }
+
+
+        function updateUser(id, typeAction) {
+            let url;
+            if (typeof typeAction != 'undefined' && typeAction != null) {
+                url = '/manager/user/detail?id=' + id + '&typeAction=' + typeAction;
+            } else {
+                url = '/manager/user/detail?id=' + id;
+            }
+            alert(url)
+            $.ajax({
+                url: url,
+                beforeSend: function () {
+                    $(".modalLoadingAjax").show();
+                },
+                success: function (data) {
+                    $(".modalLoadingAjax").hide();
+                    //Show acc canva detail
+                    let modal_show = document.getElementById("modalDetailId");
+                    modal_show.style.display = "block";
+                    $("#modalDetailId").html(data);
+                    // $("#canvaModalFragment").modal("show")
+                }
+            });
+        }
+
+    </script>
+    <script>
+        $("#sideNav").click(function () {
+            if ($(this).hasClass('closed')) {
+                $('.navbar-side').animate({left: '0px'});
+                $(this).removeClass('closed');
+                $('#page-wrapper').animate({'margin-left': '260px'});
+
+            } else {
+                $(this).addClass('closed');
+                $('.navbar-side').animate({left: '-260px'});
+                $('#page-wrapper').animate({'margin-left': '0px'});
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+<div layout:fragment="custom-content">
+    <!-- Loading icon when using ajax -->
+    <div th:insert="common/ajax/loadingIconAjax"></div>
+
+    <div id="replaceDiv" th:fragment="replaceFragment">
+        <div th:insert="user/ajax/createUserForm"></div>
+    </div>
+
+</div>
+
+
+<!-- Mapping with tag : <th:block layout:fragment="optional"/> in layout.html . Custom script for each business -->
+<th:block th:fragment="optional">
+</th:block>
+
+
+</body>
+
+</html>
+
+
+

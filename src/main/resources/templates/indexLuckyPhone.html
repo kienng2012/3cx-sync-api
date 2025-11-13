@@ -1,0 +1,236 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quay Thưởng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+<section class="random-main">
+    <div class="container py-5">
+        <div class="d-flex justify-content-center">
+            <img class="w-100" src="images/anhlogo.png" alt>
+        </div>
+        <div class="fw-bold mb-4 random-title text-center">CHƯƠNG TRÌNH
+            TRAO THƯỞNG <br>
+            CÀO TEM CHỐNG GIẢ - NHẬN NGAY MAY MẮN
+        </div>
+        <div class="number-slot" id="number-slot">
+            <!-- Các cột số sẽ được tạo bằng JS -->
+        </div>
+        <div class="random-button-main">
+            <!--            <div class="random-button" id="random-button" onclick="beginQuayThuong()" >QUAY</div>-->
+            <input class="random-button" id="random-button" type="button" onclick="beginQuayThuong()"
+                   value="QUAY"></input>
+
+        </div>
+
+        <div class="radom-infor-main container">
+            <div class="radom-infor" id>
+                <p class="radom-infor-phone">Số điện thoại:
+                    0941***488</p>
+                <p class="radom-infor-date">Thời gian xác thực:
+                    02/12/2024 20:43:25</p>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function openForm() {
+        // document.getElementById("myForm").style.display = "block";
+        document.querySelector(".radom-infor-main").classList.add("show");
+        document.querySelector(".random-button-main").classList.add("show");
+    }
+
+    function closeForm() {
+        // document.getElementById("myForm").style.display = "none";
+        document.querySelector(".radom-infor-main").classList.add("hidden");
+        document.querySelector(".random-button-main").classList.add("hidden");
+    }
+</script>
+<script>
+    //For vtrue :
+    var myInterval;
+    //For SPACE press to get lucky
+    document.body.onkeyup = function (e) {
+        if (e.key == " " ||
+            e.code == "Space" ||
+            e.keyCode == 32
+        ) {
+            beginQuayThuong();
+            //For ESC to restart
+        } else if (e.key == "Escape" ||
+            e.code == "Escape" ||
+            e.keyCode == 27
+        ) {
+            alert("Reset now ...")
+            resetFormQuayThuong();
+        }
+    }
+
+    function resetFormQuayThuong() {
+        document.querySelector('#random-button').value = 'QUAY';
+        // document.getElementById("resultQuayThuong").innerHTML = "";
+        document.getElementById("number-slot").innerHTML = "";
+        document.getElementById("msgUpdate").innerHTML = "";
+
+    }
+
+    function processSecretPhone(phone) {
+
+        const newPhone = phone.indexOf('84') == 0 ? phone.replace('84', '0') : phone;
+        //alert(newPhone);
+        return newPhone.substring(0, 4) + "***" + newPhone.substring(7, 11);
+    }
+
+    function fillToLuckyPhone(str) {
+
+        const numberSlot = document.querySelector("#number-slot");
+        for (let i = 0; i < str.length; i++) {
+            // alert(str.charAt(i));
+
+            const column = document.createElement("div");
+            column.className = "number-column";
+            column.textContent = str.charAt(i);
+            numberSlot.appendChild(column);
+            // container.innerHTML += "<div class=\"number-column\">${str.charAt(i)}</div>";
+
+        }
+    }
+
+    function formatDateStr(dateStr) {
+        //alert(dateStr);
+        var date = new Date(dateStr);
+        // alert(date);
+        var year = date.getFullYear().toString();
+        var month = (date.getMonth() + 101).toString().substring(1);
+        var day = (date.getDate() + 100).toString().substring(1);
+        return day + "-" + month + "-" + year;
+
+    }
+
+    function beginQuayThuong() {
+        if (document.getElementById("random-button").value == 'QUAY') {
+            // alert('vao quay thuong');
+            // document.getElementById("resultQuayThuong").innerHTML = "";
+            document.querySelector('#random-button').value = 'DỪNG';
+            myInterval = setInterval(myTimer, 20); //Thiet lap toc do quay cua so . cang nho cang nhanh
+            //https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_popup_form
+            // document.getElementById("myForm").style.display = "none";
+            closeForm();
+        } else if (document.getElementById("random-button").value == 'DỪNG') {
+            // alert('Bat dau quay');
+            /*  alert('Dung lai day thoi ^-^');*/
+            document.querySelector('#random-button').value = 'DỪNG';
+
+            /*  clearInterval(myInterval);*/
+            /*document.getElementById("random-button").disabled = true; //Disable click*/
+            var dataValue = {"to": "84967891610"};
+            $.ajax({
+                /* type: "POST",*/
+                /*url: "https://api.mobilebranding.vn/api/SMSBrandname/SendSMS",*/
+                type: "GET",
+                url: "/manager/getRandomLucky?typeLoad=Ajax&typeAction=1",
+                data: dataValue,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    clearInterval(myInterval);
+                    alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                },
+                success: function (result) {
+                    // alert("We returned: " + result.maTem);
+                    clearInterval(myInterval);
+                    // var parsedData = JSON.parse(result);
+                    // document.getElementById("number-slot").innerHTML = parsedData.status;
+                    // document.getElementById("number-slot").innerHTML = result.maTem;
+                    alert(result.maTem)
+                    fillToLuckyPhone(result.maTem);
+                    // document.getElementById("resultQuayThuong").innerHTML = " Số điện thoại: " + result.soDienThoai + " \n" + ". Thời gian xác thực : " + result.ngayXacThuc + " \n";
+                    // $("random-button").attr("disabled", true);
+                    //document.getElementById("stampCodeLucky").innerHTML = result.maTem;
+                /*
+                    document.getElementById("thoiGianXacThuc").innerHTML = formatDateStr(result.ngayXacThuc);
+                    document.getElementById("SoDTKH").innerHTML = processSecretPhone(result.soDienThoai);
+                    document.getElementById("stampCodeLucky").value = result.maTem;
+                    document.getElementById("myForm").style.display = "block";
+                    openForm();
+                 */
+                    // $("#replaceDiv").html(result);
+
+                }
+            });
+            document.querySelector('#random-button').value = 'QUAY';
+
+        } else {
+            //alert('BẠN ĐÃ QUAY XONG. VUI LÒNG LOAD LẠI TRANG, hoặc click vào đây ^-^');
+            document.querySelector('#random-button').value = 'QUAY';
+        }
+    }
+
+    function myStopFunction() {
+        clearInterval(myInterval);
+    }
+
+    function myTimer() {
+        //const date = new Date();
+        //document.getElementById("number-slot").innerHTML = date.toLocaleTimeString();
+        var t = Math.round(Math.random() * (10000000000 - 1) + 1); //Thiet lap xem max bao nhieu so hien thi ngau nhien
+        //var t = Math.round(Math.random() * (100) + 1);
+        /*     var t = Math.floor(Math.random() * 100) + 1*/
+        document.getElementById("number-slot").innerHTML = t;
+    }
+
+</script>
+
+<script>
+    const NUM_COLUMNS = 10;
+    const numberSlot = document.getElementById("number-slot");
+    const randomButton = document.getElementById("random-button");
+
+    function createNumberColumns() {
+        for (let i = 0; i < NUM_COLUMNS; i++) {
+            const column = document.createElement("div");
+            column.className = "number-column";
+            column.textContent = "0";
+            numberSlot.appendChild(column);
+        }
+    }
+
+
+    function startRandom() {
+        const columns = document.querySelectorAll(".number-column");
+        const finalNumbers = Array.from({length: NUM_COLUMNS}, () => Math.floor(Math.random() * 10));
+        let intervals = [];
+
+        columns.forEach((column, index) => {
+            let currentNumber = 0;
+
+            const interval = setInterval(() => {
+                currentNumber = (currentNumber + 1) % 10;
+                column.textContent = currentNumber;
+            }, 100);
+
+            intervals.push(interval);
+            setTimeout(() => {
+                clearInterval(interval);
+                column.textContent = finalNumbers[index];
+                if (index === columns.length - 1) {
+                    randomButton.style.display = "none";
+                    document.querySelector(".radom-infor-main").classList.add("show");
+                    document.querySelector(".random-button-main").classList.add("show");
+                }
+            }, 5500 + index * 300);
+        });
+    }
+
+    // randomButton.addEventListener("click", startRandom);
+    createNumberColumns();
+</script>
+</body>
+</html>
