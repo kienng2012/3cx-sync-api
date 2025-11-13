@@ -20,8 +20,7 @@ public class QuayThuongVTrueController {
     @Autowired
     private Voice3CXService voice3CXService;
 
-    @Value("api.external.privateKey")
-    private String privateKey;
+
 
     /*
 
@@ -50,12 +49,12 @@ public class QuayThuongVTrueController {
         */
     @PostMapping("/voice/answer")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> answer(@Valid() @RequestBody VoiceInputDto dto) {
+    public ResponseEntity<?> answer(
+            @RequestHeader("Authorization") String authHeader,
+            @Valid() @RequestBody VoiceInputDto dto) {
         log.info(dto);
         try {//TODO SecretKey validate : MD5
-            String tmpSecretKey = CommonUtil.encryptMd5(privateKey + dto.getDestAddr());
-            log.info("[answer]-tmpSecretKey= {}", tmpSecretKey);
-            return new ResponseEntity<>(voice3CXService.getVoiceInfo(dto.getDestAddr(), dto.getSecretKey()), HttpStatus.OK);
+            return new ResponseEntity<>(voice3CXService.getVoiceInfo(dto.getDestAddr(), authHeader), HttpStatus.OK);
             /*
             if (dto.getSecretKey() != null && tmpSecretKey.equals(dto.getSecretKey())) {
 
