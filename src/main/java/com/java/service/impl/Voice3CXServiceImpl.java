@@ -15,6 +15,8 @@ import java.util.Optional;
 @Log4j2
 public class Voice3CXServiceImpl implements Voice3CXService {
 
+    private static final Integer STATUS_PENDING = 0;
+
     @Autowired
     private SubmitOTPQueueRepository submitOTPQueueRepository;
 
@@ -30,13 +32,13 @@ public class Voice3CXServiceImpl implements Voice3CXService {
             log.info("[getVoiceInfo] Authen failure. Input token={}", secretKey);
             return voiceInfoDto;
         }
-        Optional<SubmitOTPQueue> submitOTPQueueOptional = submitOTPQueueRepository.findFirstByDestAddrOrderBySendTimestampDesc(destAddr);
+        Optional<SubmitOTPQueue> submitOTPQueueOptional = submitOTPQueueRepository.findFirstByDestAddrAndStatusOrderBySendTimestampDesc(destAddr, STATUS_PENDING);
         if (!submitOTPQueueOptional.isPresent()) {
             //1. Khong ton tai OTP hoac het han
             VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder()
                     .type(-1) //Ko ton tai hoac het han
                     .build();
-            log.info("[getVoiceInfo] OTP NotFound or Expire OTP");
+            log.info("[getVoiceInfo] OTP NotFound or Expire OTP. Dest Addr={}", destAddr);
             return voiceInfoDto;
         }
         SubmitOTPQueue submitOTPQueue = submitOTPQueueOptional.get();
@@ -46,6 +48,7 @@ public class Voice3CXServiceImpl implements Voice3CXService {
                 .api(submitOTPQueue.getApiLookup())
                 .lan("vi")
                 .build();
+        log.info("[getVoiceInfo] OTP Found Dest Addr={}, VoiceInfoDto={}", destAddr, voiceInfoDto);
         //2.Make status
         submitOTPQueueRepository.moveSubmitOtpToHistoryByID(submitOTPQueue.getId(), submitOTPQueue.getReceiveId());
 
