@@ -28,6 +28,9 @@ public class SubmitOTPQueue {
     @Column(name = "SOURCE_ADDR")
     private String sourceAddr;
 
+    @Column(name = "USER_ID")
+    private String username;
+
     @Column(name = "DEST_ADDR")
     private String destAddr;
     @Column(name = "METHOD")
@@ -39,6 +42,9 @@ public class SubmitOTPQueue {
 
     @Column(name = "SHORT_MESSAGE")
     private String shortMessage;
+
+    @Column(name = "LANGUAGE")
+    private String language;
 
     @Column(name = "TYPE_SERVICE")
     private Integer typeService;

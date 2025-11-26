@@ -1,6 +1,7 @@
 package com.java.controller;
 
 import com.java.dto.VoiceInputDto;
+import com.java.dto.VoiceReceiveDto;
 import com.java.service.Voice3CXService;
 import com.java.util.CommonUtil;
 import lombok.extern.log4j.Log4j2;
@@ -19,8 +20,6 @@ import javax.validation.Valid;
 public class QuayThuongVTrueController {
     @Autowired
     private Voice3CXService voice3CXService;
-
-
 
     /*
 
@@ -47,30 +46,64 @@ public class QuayThuongVTrueController {
 
         }
         */
-    @PostMapping("/voice/answer")
+
+    /**
+     * For API call to receive request OTP
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("/voice/receiveRequestOtp")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> answer(
-            @RequestHeader("Authorization") String authHeader,
-            @Valid() @RequestBody VoiceInputDto dto) {
+    public ResponseEntity<?> receiveRequestOtp(@Valid() @RequestBody VoiceReceiveDto dto) {
         log.info(dto);
         try {//TODO SecretKey validate : MD5
-            return new ResponseEntity<>(voice3CXService.getVoiceInfo(dto.getDestAddr(), authHeader), HttpStatus.OK);
-            /*
-            if (dto.getSecretKey() != null && tmpSecretKey.equals(dto.getSecretKey())) {
+            return new ResponseEntity<>(voice3CXService.receiveRequestVoice(dto), HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error("[receiveRequestOtp] Exception: {}", ex);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
 
-                return new ResponseEntity<>(voice3CXService.getVoiceInfo(dto.getDestAddr(), dto.getSecretKey()), HttpStatus.OK);
-            } else {
-                log.info("[answer] AUTHEN FAILED. Detail {}", dto);
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-            }
+    /**
+     * For API call to process Get OTP
+     *
+     * @param dto
+     * @return
+     */
 
-             */
+    @PostMapping("/voice/processOtp")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> processOtp(@Valid() @RequestBody VoiceInputDto dto) {
+        log.info(dto);
+        try {
+            return new ResponseEntity<>(voice3CXService.getVoiceInfoForApi(dto), HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error("[processOtp] Exception: {}", ex);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * For 3cx call to process Get OTP
+     *
+     * @param authHeader
+     * @param dto
+     * @return
+     */
+    @PostMapping("/voice/processOtp3cx")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> answer(@RequestHeader("Authorization") String authHeader, @Valid() @RequestBody VoiceInputDto dto) {
+        if (!CommonUtil.isNullOrEmpty(authHeader)) dto.setSecretKey(authHeader);
+        log.info(dto);
+        try {//TODO SecretKey validate : MD5
+            return new ResponseEntity<>(voice3CXService.getVoiceInfoFor3cx(dto), HttpStatus.OK);
         } catch (Exception ex) {
             log.error("[answer] Exception: {}", ex);
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
     }
+
 /*
     @GetMapping("/vtrue/luckyStampQueue/{stampCode}")
     public ResponseEntity<?> findStampCode(@RequestHeader("secretKey") String secretKey, @PathVariable String stampCode

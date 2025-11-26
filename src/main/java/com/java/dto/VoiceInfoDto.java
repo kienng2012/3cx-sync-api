@@ -13,4 +13,5 @@ public class VoiceInfoDto {
     private String api;
     private Integer type;
     private String lan;
+    private String method;
 }

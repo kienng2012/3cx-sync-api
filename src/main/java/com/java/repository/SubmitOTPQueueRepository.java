@@ -12,7 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface SubmitOTPQueueRepository extends JpaRepository<SubmitOTPQueue, Long> {
-    Optional<SubmitOTPQueue> findFirstByDestAddrAndStatusOrderBySendTimestampDesc(String username,Integer status);
+//    Optional<SubmitOTPQueue> findFirstByDestAddrAndStatusOrderBySendTimestampDesc(String destAddr, Integer status);
+
+    Optional<SubmitOTPQueue> findFirstByUsernameAndDestAddrAndStatusOrderBySendTimestampDesc(String username, String destAddr, Integer status);
 
     /*
     B1: Chuyen du lieu tu bang SUBMIT_OTP_QUEUE to SUBMIT_OTP_HISTORY ( dong thoi xoa ban ghi tai bang SUBMIT_OTP_QUEUE)

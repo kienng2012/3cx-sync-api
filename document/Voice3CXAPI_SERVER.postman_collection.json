@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "74412932-6f7d-4970-b105-ced6206f4340",
+		"name": "Voice3CXAPI_SERVER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6364532"
+	},
+	"item": [
+		{
+			"name": "processOtp API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ0.eyJhdWQiOlsicmVzb3VyY2VfaWQiXSwidXNlcl9uYW1lIjoibGFwLnAudC5jLnJAZ21haWwuY29tIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIiwidHJ1c3QiXSwiaWQiOjUxMCwiZXhwIjoxNjMwOTg0NDU4LCJhdXRob3JpdGllcyI6WyJST0xFX1RFQUNIRVIiXSwianRpIjoiYjA5MzAwMDEtYjFkNi00NTI4LWIwMjQtYzI4MWM0OGUyNTNjIiwiY2xpZW50X2lkIjoiY29yZS1hcGktY2xpZW50In1.9jPrXN0XLRiWH6ijPc505hapFzfbDR4PXIrgQChzb42",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"rsc\",\r\n    \"destAddr\": \"0967891610\",\r\n    \"secretKey\":\"D7BCFCCD58BB2D82F7D5FC646F743F88\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://171.244.52.64:1992/sync-3cx-api/voice/processOtp",
+					"protocol": "http",
+					"host": [
+						"171",
+						"244",
+						"52",
+						"64"
+					],
+					"port": "1992",
+					"path": [
+						"sync-3cx-api",
+						"voice",
+						"processOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "receiveRequestVoice  LOCAL",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"rsc\",\r\n    \"destAddr\": \"0967891610\",\r\n    \"otp\":\"1007\",\r\n    \"secretKey\":\"D7BCFCCD58BB2D82F7D5FC646F743F88\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://171.244.52.64:1992/sync-3cx-api/voice/receiveRequestOtp",
+					"protocol": "http",
+					"host": [
+						"171",
+						"244",
+						"52",
+						"64"
+					],
+					"port": "1992",
+					"path": [
+						"sync-3cx-api",
+						"voice",
+						"receiveRequestOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "processOTP For SMPP LOCAL",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ0.eyJhdWQiOlsicmVzb3VyY2VfaWQiXSwidXNlcl9uYW1lIjoibGFwLnAudC5jLnJAZ21haWwuY29tIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIiwidHJ1c3QiXSwiaWQiOjUxMCwiZXhwIjoxNjMwOTg0NDU4LCJhdXRob3JpdGllcyI6WyJST0xFX1RFQUNIRVIiXSwianRpIjoiYjA5MzAwMDEtYjFkNi00NTI4LWIwMjQtYzI4MWM0OGUyNTNjIiwiY2xpZW50X2lkIjoiY29yZS1hcGktY2xpZW50In1.9jPrXN0XLRiWH6ijPc505hapFzfbDR4PXIrgQChzb42",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"vnet3cx\",\r\n    \"destAddr\": \"0967891610\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://171.244.52.64:1992/sync-3cx-api/voice/processOtp3cx",
+					"protocol": "http",
+					"host": [
+						"171",
+						"244",
+						"52",
+						"64"
+					],
+					"port": "1992",
+					"path": [
+						"sync-3cx-api",
+						"voice",
+						"processOtp3cx"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
