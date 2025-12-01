@@ -45,7 +45,7 @@ public class Voice3CXServiceImpl implements Voice3CXService {
             VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder()
                     .type(-2) //Authen failure
                     .build();
-            log.info("[getVoiceInfoForApi] USER_NOT_ALLOWED {}", dto);
+            log.info("[getVoiceInfoFor3cx] USER_NOT_ALLOWED {}", dto);
             return voiceInfoDto;
         }
         //AUTHENTICATE SUCCESS => PROCESS BUSINESS
