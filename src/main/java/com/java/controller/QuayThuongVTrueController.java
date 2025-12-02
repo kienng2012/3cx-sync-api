@@ -72,6 +72,7 @@ public class QuayThuongVTrueController {
      * @return
      */
 
+    /*
     @PostMapping("/voice/processOtp")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> processOtp(@Valid() @RequestBody VoiceInputDto dto) {
@@ -83,23 +84,24 @@ public class QuayThuongVTrueController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+    */
 
     /**
      * For 3cx call to process Get OTP
      *
      * @param authHeader
      * @param dto
-     * @return
+     * @return type=-2:Authen | -1:Ko co OTP| 0: Pass Khong can doc | 1: Doc OTP
      */
     @PostMapping("/voice/processOtp3cx")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> answer(@RequestHeader("Authorization") String authHeader, @Valid() @RequestBody VoiceInputDto dto) {
+    public ResponseEntity<?> processOtp3cx(@RequestHeader("Authorization") String authHeader, @Valid() @RequestBody VoiceInputDto dto) {
         if (!CommonUtil.isNullOrEmpty(authHeader)) dto.setSecretKey(authHeader);
         log.info(dto);
         try {//TODO SecretKey validate : MD5
             return new ResponseEntity<>(voice3CXService.getVoiceInfoFor3cx(dto), HttpStatus.OK);
         } catch (Exception ex) {
-            log.error("[answer] Exception: {}", ex);
+            log.error("[processOtp3cx] Exception: {}", ex);
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }

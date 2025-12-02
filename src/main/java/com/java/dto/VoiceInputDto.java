@@ -12,9 +12,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class VoiceInputDto {
+    /*
     @NotBlank(message = "Username not blank")
     @NotNull(message = "Username not null")
     private String username;
+
+     */
     @NotBlank(message = "DestAddress not blank")
     @NotNull(message = "DestAddress not null")
     private String destAddr;

@@ -24,4 +24,6 @@ public interface SubmitOTPQueueRepository extends JpaRepository<SubmitOTPQueue, 
     @Transactional
     @Query(value = "EXEC [dbo].[moveSubmitOtpToHistoryByID] :ID, :ReceiveID", nativeQuery = true)
     void moveSubmitOtpToHistoryByID(@Param("ID") long ID, @Param("ReceiveID") Long ReceiveID);
+
+    Optional<SubmitOTPQueue> findFirstByDestAddrAndStatusOrderBySendTimestampDesc(String destAddr, Integer status);
 }

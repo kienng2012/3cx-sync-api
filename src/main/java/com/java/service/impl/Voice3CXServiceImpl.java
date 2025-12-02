@@ -42,14 +42,13 @@ public class Voice3CXServiceImpl implements Voice3CXService {
     @Override
     public VoiceInfoDto getVoiceInfoFor3cx(VoiceInputDto dto) {
         if (!secretKeyAuthen.equals(dto.getSecretKey())) {
-            VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder()
-                    .type(-2) //Authen failure
+            VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder().type(-2) //Authen failure
                     .build();
             log.info("[getVoiceInfoFor3cx] USER_NOT_ALLOWED {}", dto);
             return voiceInfoDto;
         }
         //AUTHENTICATE SUCCESS => PROCESS BUSINESS
-        return this.processGetVoiceInfo(dto.getUsername(), dto.getDestAddr());
+        return this.processGetVoiceInfo(dto.getDestAddr());
     }
 
     /**
@@ -58,6 +57,7 @@ public class Voice3CXServiceImpl implements Voice3CXService {
      * @param dto systemSecretkey = MD5(username+destAddr+privateKey);
      * @return
      */
+    /*
     @Override
     public VoiceInfoDto getVoiceInfoForApi(VoiceInputDto dto) {
         log.info("[getVoiceInfoForApi] VoiceInputDto={}", dto);
@@ -73,6 +73,9 @@ public class Voice3CXServiceImpl implements Voice3CXService {
         return this.processGetVoiceInfo(dto.getUsername(), dto.getDestAddr());
     }
 
+
+     */
+
     /**
      * FOR API request receive OTP
      *
@@ -84,34 +87,24 @@ public class Voice3CXServiceImpl implements Voice3CXService {
         log.info("[receiveRequestVoice] VoiceReceiveDto={}", dto);
         VoiceResponseDto voiceResponseDto;
         if (!this.validateAuthenticateApi(dto.getUsername(), dto.getDestAddr(), dto.getSecretKey())) {
-            voiceResponseDto = VoiceResponseDto.builder()
-                    .errorCode(-2L)
-                    .errorMessage("USER_NOT_ALLOWED !")
-                    .build();
+            voiceResponseDto = VoiceResponseDto.builder().errorCode(-2L).errorMessage("USER_NOT_ALLOWED !").build();
             return voiceResponseDto;
         }
         //VALID AUTHENTICATE => PROCESS BUSINESS
         return this.processReceiveRequestVoice(dto);
     }
 
-    private VoiceInfoDto processGetVoiceInfo(String username, String destAddr) {
-        Optional<SubmitOTPQueue> submitOTPQueueOptional = submitOTPQueueRepository.findFirstByUsernameAndDestAddrAndStatusOrderBySendTimestampDesc(username, destAddr, STATUS_PENDING);
+    private VoiceInfoDto processGetVoiceInfo(String destAddr) {
+        Optional<SubmitOTPQueue> submitOTPQueueOptional = submitOTPQueueRepository.findFirstByDestAddrAndStatusOrderBySendTimestampDesc(destAddr, STATUS_PENDING);
         if (!submitOTPQueueOptional.isPresent()) {
             //1. Khong ton tai OTP hoac het han
-            VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder()
-                    .type(-1) //Ko ton tai hoac het han
+            VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder().type(-1) //Ko ton tai hoac het han
                     .build();
             log.info("[processGetVoiceInfo] OTP NotFound or Expire OTP. Dest Addr={}", destAddr);
             return voiceInfoDto;
         }
         SubmitOTPQueue submitOTPQueue = submitOTPQueueOptional.get();
-        VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder()
-                .type(submitOTPQueue.getTypeService())
-                .otp(submitOTPQueue.getShortMessage())
-                .api(submitOTPQueue.getApiLookup())
-                .lan(CommonUtil.isNullOrEmpty(submitOTPQueue.getLanguage()) ? "vi" : submitOTPQueue.getLanguage())
-                .method(submitOTPQueue.getMethod())
-                .build();
+        VoiceInfoDto voiceInfoDto = VoiceInfoDto.builder().type(submitOTPQueue.getTypeService()).otp(submitOTPQueue.getShortMessage()).api(submitOTPQueue.getApiLookup()).lan(CommonUtil.isNullOrEmpty(submitOTPQueue.getLanguage()) ? "vi" : submitOTPQueue.getLanguage()).method(submitOTPQueue.getMethod()).build();
         log.info("[processGetVoiceInfo] OTP Found Dest Addr={}, VoiceInfoDto={}", destAddr, voiceInfoDto);
         //2.Make status
         submitOTPQueueRepository.moveSubmitOtpToHistoryByID(submitOTPQueue.getId(), submitOTPQueue.getReceiveId());

@@ -8,7 +8,7 @@ import com.java.dto.response.core.impl.VoiceResponseDto;
 public interface Voice3CXService {
     VoiceInfoDto getVoiceInfoFor3cx(VoiceInputDto dto); //FOR 3cx CAll
 
-    VoiceInfoDto getVoiceInfoForApi(VoiceInputDto dto); //FOR api CAll
+//    VoiceInfoDto getVoiceInfoForApi(VoiceInputDto dto); //FOR api CAll
 
 
     VoiceResponseDto receiveRequestVoice(VoiceReceiveDto dto);
